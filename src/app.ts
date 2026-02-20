@@ -11,11 +11,12 @@ import { TutorSlot } from './Module/TutorSlot/tutorSlot.route';
 
 const app = express();
 
-app.set('trust proxy', true);
-
 app.use(
   cors({
-    origin: 'https://skill-bridge-frontend-2zjl.vercel.app',
+    origin: [
+      'http://localhost:3000',
+      'https://skill-bridge-frontend-2zjl.vercel.app',
+    ],
     credentials: true,
   }),
 );
