@@ -9,6 +9,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.APP_URL!,
     'https://skill-bridge-frontend-2zjl.vercel.app',
+    'http://localhost:3000', // Local frontend
   ],
   user: {
     additionalFields: {
@@ -54,8 +55,8 @@ export const auth = betterAuth({
     },
     cookiePrefix: 'better-auth',
     defaultCookieAttributes: {
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'lax',
+      secure: false,
       httpOnly: true,
 
       //extra
@@ -65,8 +66,8 @@ export const auth = betterAuth({
     cookies: {
       state: {
         attributes: {
-          sameSite: 'none',
-          secure: true,
+          sameSite: 'lax',
+          secure: false,
           // extra
           path: '/',
         },

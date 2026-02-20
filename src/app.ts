@@ -15,7 +15,8 @@ app.set('trust proxy', true);
 
 app.use(
   cors({
-    origin: '*',
+    origin: 'https://skill-bridge-frontend-2zjl.vercel.app',
+    credentials: true,
   }),
 );
 
