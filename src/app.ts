@@ -15,6 +15,7 @@ app.set('trust proxy', true);
 
 const allowedOrigins = [
   'https://skill-bridge-frontend-2zjl.vercel.app',
+  'https://skill-bridge-backend-seven.vercel.app',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5000',
