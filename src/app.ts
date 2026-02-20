@@ -14,7 +14,7 @@ const app = express();
 app.set('trust proxy', true);
 
 const allowedOrigins = [
-  'https://skill-bridge-fontend-five.vercel.app',
+  'https://skill-bridge-frontend-2zjl.vercel.app',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5000',
@@ -42,7 +42,7 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     exposedHeaders: ['Set-Cookie'],
-  })
+  }),
 );
 
 // app.use(cors({
