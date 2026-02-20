@@ -13,38 +13,35 @@ const app = express();
 
 app.set('trust proxy', true);
 
-const allowedOrigins = [
-  'https://skill-bridge-frontend-2zjl.vercel.app',
-  'https://skill-bridge-backend-seven.vercel.app',
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:5000',
-];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-
-      // Check if origin is in allowedOrigins or matches Vercel preview pattern
-      const isAllowed =
-        allowedOrigins.includes(origin) ||
-        /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) ||
-        /^https:\/\/.*\.vercel\.app$/.test(origin); // Any Vercel deployment
-
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        callback(new Error(`Origin ${origin} not allowed by CORS`));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie'],
+    origin: '*',
   }),
 );
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       // Allow requests with no origin (mobile apps, Postman, etc.)
+//       if (!origin) return callback(null, true);
+
+//       // Check if origin is in allowedOrigins or matches Vercel preview pattern
+//       const isAllowed =
+//         allowedOrigins.includes(origin) ||
+//         /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) ||
+//         /^https:\/\/.*\.vercel\.app$/.test(origin); // Any Vercel deployment
+
+//       if (isAllowed) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error(`Origin ${origin} not allowed by CORS`));
+//       }
+//     },
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+//     exposedHeaders: ['Set-Cookie'],
+//   }),
+// );
 
 // app.use(cors({
 //     origin: [process.env.APP_URL as string , 'http://localhost:3000', "https://skill-bridge-fontend-five.vercel.app"],
