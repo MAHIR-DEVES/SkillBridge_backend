@@ -22,7 +22,7 @@ type SlotInput = {
 const createtutor = async (
   tutorData: Omit<TutorProfile, 'id' | 'createdAt' | 'updatedAt' | 'userId'>,
   userId: string,
-  slots?: SlotInput[], // optional
+  slots?: SlotInput[] // optional
 ) => {
   // check existing
   const existingTutor = await prisma.tutorProfile.findUnique({
@@ -42,15 +42,25 @@ const createtutor = async (
       }))
     : [];
 
-  const result = await prisma.tutorProfile.create({
-    data: {
-      ...tutorData,
-      userId,
-      // if no slots, create: [] works fine
-      tutorSlots: {
-        create: slotsCreatePayload,
-      },
+  // Handle categoryId - only include it if it's a valid UUID
+  const createData: any = {
+    ...tutorData,
+    userId,
+    tutorSlots: {
+      create: slotsCreatePayload,
     },
+  };
+
+  // Only include categoryId if it's a valid UUID (not empty string)
+  if (tutorData.categoryId && tutorData.categoryId.trim() !== '') {
+    createData.categoryId = tutorData.categoryId;
+  } else {
+    // Explicitly set to null if no valid categoryId
+    createData.categoryId = null;
+  }
+
+  const result = await prisma.tutorProfile.create({
+    data: createData,
     // include relations so frontend gets full object (slots, user, category)
     include: {
       tutorSlots: true,
@@ -68,8 +78,8 @@ const updateTutorProfile = async (
       TutorProfile,
       'id' | 'createdAt' | 'updatedAt' | 'userId' | 'categoryId'
     >
-  > & { categoryName?: string },
-  userId: string,
+  > & { categoryName?: string; categoryId?: string },
+  userId: string
 ) => {
   let categoryId: string | undefined;
 
@@ -85,7 +95,18 @@ const updateTutorProfile = async (
   if (fields.experience !== undefined)
     fields.experience = String(fields.experience);
   if (fields.price !== undefined) fields.price = Number(fields.price);
-  if (categoryId) fields.categoryId = categoryId;
+
+  // Handle categoryId properly - set to null if empty
+  if (categoryId) {
+    fields.categoryId = categoryId;
+  } else if ('categoryId' in data) {
+    // If categoryId was explicitly provided in data
+    if (data.categoryId && data.categoryId.trim() !== '') {
+      fields.categoryId = data.categoryId;
+    } else {
+      fields.categoryId = null;
+    }
+  }
 
   const result = await prisma.tutorProfile.update({
     where: { userId },
@@ -160,7 +181,7 @@ const creaCategory = async (category: { name: string }) => {
 };
 
 const getMyProfiletetutor = async (payload: { userId: string }) => {
-  // যদি আপনার schema এ userId unique হয় তাহলে findUnique ব্যবহার করুন। না হলে findFirst ঠিক আছে।
+  // যদি আপনার schema এ userId unique হয় তাহলে findUnique ব্যবহার করুন। না হলে findFirst ঠিক আছে।
   return prisma.tutorProfile.findUnique({
     where: { userId: payload.userId },
   });

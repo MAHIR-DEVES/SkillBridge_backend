@@ -23,12 +23,12 @@ async function seedAdmin() {
     }
 
     const signUpAdmin = await fetch(
-      'https://skill-bridge-backend-seven.vercel.app/api/auth/sign-up/email',
+      `${process.env.BETTER_AUTH_URL}/api/auth/sign-up/email`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Origin: 'https://skill-bridge-backend-seven.vercel.app',
+          Origin: `${process.env.BETTER_AUTH_URL}`,
         },
         body: JSON.stringify(adminData),
       },
