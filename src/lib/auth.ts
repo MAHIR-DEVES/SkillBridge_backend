@@ -1,4 +1,4 @@
-import { betterAuth, string } from 'better-auth';
+import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { prisma } from './prisma';
 
@@ -6,11 +6,13 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
+
   trustedOrigins: [
     process.env.APP_URL!,
-    'https://skill-bridge-frontend-2zjl.vercel.app',
-    'http://localhost:3000', // Local frontend
+    process.env.PROD_APP_URL!,
+    'http://localhost:3000',
   ],
+
   user: {
     additionalFields: {
       role: {
@@ -28,6 +30,7 @@ export const auth = betterAuth({
       },
     },
   },
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
@@ -42,37 +45,21 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60, // 5 minutes
+      maxAge: 5 * 60,
     },
   },
 
   advanced: {
+    cookiePrefix: 'better-auth',
+    useSecureCookies: process.env.NODE_ENV === 'production',
     crossSubDomainCookies: {
       enabled: false,
     },
-    cookiePrefix: 'better-auth',
-    defaultCookieAttributes: {
-      sameSite: 'lax',
-      secure: false,
-      httpOnly: true,
-
-      //extra
-      path: '/',
-    },
-    trustProxy: true,
-    cookies: {
-      state: {
-        attributes: {
-          sameSite: 'lax',
-          secure: false,
-          // extra
-          path: '/',
-        },
-      },
-    },
     disableCSRFCheck: true,
+    trustProxy: true,
   },
 });
