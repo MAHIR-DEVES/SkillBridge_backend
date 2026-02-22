@@ -13,10 +13,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://skill-bridge-frontend-2zjl.vercel.app',
-    ],
+    origin: 'https://skill-bridge-frontend-2zjl.vercel.app',
+
     credentials: true,
   }),
 );
